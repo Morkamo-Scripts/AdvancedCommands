@@ -1,4 +1,7 @@
-﻿using Exiled.API.Interfaces;
+﻿using System.ComponentModel;
+using AdvancedCommands.Commands.IWantScp;
+using AdvancedCommands.Commands.JoinWave;
+using Exiled.API.Interfaces;
 
 namespace AdvancedCommands
 {
@@ -6,5 +9,12 @@ namespace AdvancedCommands
     {
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = false;
+        
+        [Description("Спавнит игрока в недавно прибывшем отряде в течение овертайма.")]
+        public JoinWaveHandler JoinWave { get; set; } = new();
+
+        [Description("Добавляет вас в список участников лотерей на замену вышедшего SCP.")]
+        // ReSharper disable once InconsistentNaming
+        public IwsHandler IWantScp { get; set; } = new();
     }
 }

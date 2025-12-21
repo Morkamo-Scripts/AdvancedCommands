@@ -206,9 +206,23 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Commands\IWantScp\IwsCommand.cs" />
+        <Compile Include="Commands\IWantScp\IwsHandler.cs" />
+        <Compile Include="Commands\JoinWave\JoinWaveCommand.cs" />
+        <Compile Include="Commands\JoinWave\JoinWaveHandler.cs" />
+        <Compile Include="Commands\PlayerSize\PlayerSizeCommand.cs" />
+        <Compile Include="Commands\SpawnXmasTree.cs" />
+        <Compile Include="Components\Extensions\PlayerExtensions.cs" />
+        <Compile Include="Components\Features\Components\PlayerProperties.cs" />
+        <Compile Include="Components\Features\Components\Interfaces\IPropertyModule.cs" />
+        <Compile Include="Components\Features\CoroutineRunner.cs" />
+        <Compile Include="Components\Features\PlayerAdvancedCommands.cs" />
         <Compile Include="Config.cs" />
         <Compile Include="Plugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Patches\" />
     </ItemGroup>
     <!--<ItemGroup>
       <None Include="App.config" />

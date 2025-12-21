@@ -1,0 +1,14 @@
+﻿using AdvancedCommands.Components.Features;
+using CommandSystem;
+using Exiled.API.Features;
+
+namespace AdvancedCommands.Components.Extensions;
+
+public static class PlayerExtensions
+{
+    public static Player AsPlayer(this ICommandSender sender)
+        => Player.Get(sender);
+
+    public static PlayerAdvancedCommands AdvancedCommand(this Player player)
+        => player.ReferenceHub.GetComponent<PlayerAdvancedCommands>();
+}

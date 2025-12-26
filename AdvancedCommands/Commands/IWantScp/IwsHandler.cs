@@ -6,6 +6,7 @@ using AdvancedCommands.Components.Features;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
+using Exiled.Events.EventArgs.Server;
 using JetBrains.Annotations;
 using MEC;
 using PlayerRoles;
@@ -20,20 +21,31 @@ public class IwsHandler
     public const int HintHeight = 150;
     public const float HintDuration = 1.05f;
     
-    public HashSet<RoleTypeId> LeavedScp { get; private set; } = new();
-    public HashSet<Player> LotteryMembers { get; private set; } = new();
+    public HashSet<RoleTypeId> LeavedScp = new();
+    public HashSet<Player> LotteryMembers = new();
 
-    public static float LotteryProcessingTime { get; private set; } = 25;
-    public static float TimeForReplacement { get; private set; } = 90;
+    public static float LotteryProcessingTime = 25;
+    public static float TimeForReplacement = 90;
     
-    public bool IsLotteryProcessing { get; private set; } = false;
-    public bool IsLotteryClosed { get; private set; } = false;
-    
-    [CanBeNull] public Coroutine LotteryCoroutine { get; private set; }
+    public bool IsLotteryProcessing = false;
+    public bool IsLotteryClosed = false;
+
+    [CanBeNull] public Coroutine LotteryCoroutine;
+
+    public void OnRoundEnded(RoundEndedEventArgs ev)
+    {
+        if (LotteryCoroutine != null)
+            CoroutineRunner.Stop(LotteryCoroutine);
+        IsLotteryClosed = false;
+        IsLotteryProcessing = false;
+        LeavedScp.Clear();
+        LotteryMembers.Clear();
+        LotteryCoroutine = null;
+    }
     
     public void LeftPlayer(LeftEventArgs ev)
     {
-        if (Round.ElapsedTime.TotalSeconds > TimeForReplacement)
+        if (Round.ElapsedTime.TotalSeconds > TimeForReplacement && Round.IsStarted && !Round.IsEnded)
             return;
         
         if (ev.Player.IsScp && ev.Player.Role.Type != RoleTypeId.Scp0492)
@@ -53,6 +65,9 @@ public class IwsHandler
         
         for (int i = (int)LotteryProcessingTime; i != 0; i--)
         {
+            if (Round.IsEnded)
+                yield break;
+            
             foreach (var player in Player.List)
             {
                 if (!player.IsScp)

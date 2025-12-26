@@ -206,11 +206,13 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Commands\CapybaraMode\CapybaraModeCommand.cs" />
         <Compile Include="Commands\IWantScp\IwsCommand.cs" />
         <Compile Include="Commands\IWantScp\IwsHandler.cs" />
         <Compile Include="Commands\JoinWave\JoinWaveCommand.cs" />
         <Compile Include="Commands\JoinWave\JoinWaveHandler.cs" />
         <Compile Include="Commands\PlayerSize\PlayerSizeCommand.cs" />
+        <Compile Include="Commands\RandomPlayerSelection\RandomPlayerSelectionCommand.cs" />
         <Compile Include="Commands\SpawnXmasTree.cs" />
         <Compile Include="Components\Extensions\PlayerExtensions.cs" />
         <Compile Include="Components\Features\Components\PlayerProperties.cs" />

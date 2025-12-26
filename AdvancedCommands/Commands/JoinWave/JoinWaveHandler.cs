@@ -14,44 +14,29 @@ namespace AdvancedCommands.Commands.JoinWave;
 public class JoinWaveHandler
 {
     public ushort SpawnOvertime { get; set; } = 30;
-    public DateTime? LastSpawnTime;
-    public Team? LastSpawnTeam;
 
     public HashSet<RoleTypeId> AllowedChaosInsurgencyRoles { get; set; } = new()
     {
         RoleTypeId.ChaosConscript,
-        RoleTypeId.ChaosMarauder,
         RoleTypeId.ChaosRepressor,
-        RoleTypeId.ChaosRifleman
+        RoleTypeId.ChaosRifleman,
+        RoleTypeId.ChaosMarauder
     };
     
     public HashSet<RoleTypeId> AllowedNtfRoles { get; set; } = new()
     {
-        RoleTypeId.NtfCaptain,
         RoleTypeId.NtfSergeant,
         RoleTypeId.NtfPrivate,
-        RoleTypeId.NtfSpecialist
     };
 
-    public void OnChaosEntrance(AnnouncingChaosEntranceEventArgs ev)
+    public void OnRespawningTeam(RespawningTeamEventArgs ev)
     {
-        LastSpawnTime = DateTime.UtcNow;
-        LastSpawnTeam = ev.Wave.Team;
+        Plugin.Instance.LastSpawnTime = DateTime.UtcNow;
+        Plugin.Instance.LastSpawnTeam = ev.Wave.Team;
 
         foreach (var player in Player.List)
         {
             player.AdvancedCommand().PlayerProperties.HasBeenSpawned = false;
-        }
-    }
-    
-    public void OnNtfEntrance(AnnouncingNtfEntranceEventArgs ev)
-    {
-        LastSpawnTime = DateTime.UtcNow;
-        LastSpawnTeam = ev.Wave.Team;
-        
-        foreach (var player in Player.List)
-        {
-            player.AdvancedCommand().PlayerProperties.HasBeenSpawned = false;
-        }
+        } 
     }
 }

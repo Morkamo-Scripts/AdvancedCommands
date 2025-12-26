@@ -45,7 +45,7 @@ public class JoinWaveCommand : ICommand
             return false;
         }
 
-        if (InstanceConfig().JoinWave.LastSpawnTime == null)
+        if (Plugin.Instance.LastSpawnTime == null)
         {
             response = "<color=orange>Ни один отряд ещё не прибывал!</color>";
             return false;
@@ -57,13 +57,13 @@ public class JoinWaveCommand : ICommand
             return false;
         }
         
-        if (DateTime.UtcNow - InstanceConfig().JoinWave.LastSpawnTime >= TimeSpan.FromSeconds(30))
+        if (DateTime.UtcNow - Plugin.Instance.LastSpawnTime >= TimeSpan.FromSeconds(30))
         {
             response = $"<color=orange>Время овертайма истекло! ({InstanceConfig().JoinWave.SpawnOvertime} сек.)</color>";
             return false;
         }
 
-        switch (InstanceConfig().JoinWave.LastSpawnTeam)
+        switch (Plugin.Instance.LastSpawnTeam)
         {
             case Team.ChaosInsurgency:
             {

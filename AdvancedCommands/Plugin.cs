@@ -6,6 +6,7 @@ using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using HarmonyLib;
 using MEC;
+using PlayerRoles;
 using RueI.API;
 using RueI.API.Elements;
 using events = Exiled.Events.Handlers;
@@ -27,10 +28,15 @@ namespace AdvancedCommands
         public JoinWaveHandler JoinWaveHandler;
         public IwsHandler IwsHandler;
         
+        public DateTime? LastSpawnTime { get; set; }
+        public Team? LastSpawnTeam { get; set; }
+
+        /*public static Team? LastSpawnedTeam;*/
+        
         private void InitClasses()
         {
             JoinWaveHandler = Config.JoinWave;
-            IwsHandler = Config.IWantScp;
+            IwsHandler = new IwsHandler();
         }
 
         private void DeInitClasses()
@@ -42,17 +48,17 @@ namespace AdvancedCommands
         private void RegisterEvents()
         {
             events.Player.Verified += OnVerifiedPlayer;
-            events.Map.AnnouncingChaosEntrance += JoinWaveHandler.OnChaosEntrance;
-            events.Map.AnnouncingNtfEntrance += JoinWaveHandler.OnNtfEntrance;
+            events.Server.RespawningTeam += JoinWaveHandler.OnRespawningTeam;
             events.Player.Left += IwsHandler.LeftPlayer;
+            events.Server.RoundEnded += IwsHandler.OnRoundEnded;
         }
 
         private void UnregisterEvents()
         {
             events.Player.Verified -= OnVerifiedPlayer;
-            events.Map.AnnouncingChaosEntrance -= JoinWaveHandler.OnChaosEntrance;
-            events.Map.AnnouncingNtfEntrance -= JoinWaveHandler.OnNtfEntrance;
+            events.Server.RespawningTeam -= JoinWaveHandler.OnRespawningTeam;
             events.Player.Left -= IwsHandler.LeftPlayer;
+            events.Server.RoundEnded -= IwsHandler.OnRoundEnded;
         }
         
         public override void OnEnabled()

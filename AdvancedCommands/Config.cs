@@ -12,9 +12,5 @@ namespace AdvancedCommands
         
         [Description("Спавнит игрока в недавно прибывшем отряде в течение овертайма.")]
         public JoinWaveHandler JoinWave { get; set; } = new();
-
-        [Description("Добавляет вас в список участников лотерей на замену вышедшего SCP.")]
-        // ReSharper disable once InconsistentNaming
-        public IwsHandler IWantScp { get; set; } = new();
     }
 }

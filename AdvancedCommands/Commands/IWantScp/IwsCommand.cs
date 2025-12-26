@@ -18,7 +18,7 @@ public class IwsCommand : ICommand
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
-        if (!InstanceConfig().IWantScp.IsLotteryProcessing)
+        if (!Plugin.Instance.IwsHandler.IsLotteryProcessing)
         {
             response = "<color=orange>Сейчас лотерея не проводится!</color>";
             return false;
@@ -36,13 +36,13 @@ public class IwsCommand : ICommand
             return false;
         }
 
-        if (InstanceConfig().IWantScp.IsLotteryClosed)
+        if (Plugin.Instance.IwsHandler.IsLotteryClosed)
         {
             response = "<color=orange>Лотерея окончена! Идёт подсчёт тикетов...</color>";
             return false;
         }
 
-        var members = InstanceConfig().IWantScp.LotteryMembers;
+        var members = Plugin.Instance.IwsHandler.LotteryMembers;
 
         if (members.Contains(sender.AsPlayer()))
         {

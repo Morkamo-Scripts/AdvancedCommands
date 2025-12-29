@@ -134,6 +134,11 @@
             <Private>false</Private>
         </Reference>
 
+        <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+          <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
         <Reference Include="NorthwoodLib">
             <HintPath>..\..\Libs\NorthwoodLib.dll</HintPath>
             <Private>false</Private>
@@ -163,6 +168,41 @@
         </Reference>
 
         <Reference Include="System.Data">
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="System.IO, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.IO.4.3.0\lib\net462\System.IO.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="System.Runtime, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Runtime.4.3.0\lib\net462\System.Runtime.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="System.Security.Cryptography.Encoding, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Security.Cryptography.Encoding.4.3.0\lib\net46\System.Security.Cryptography.Encoding.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="System.Security.Cryptography.Primitives, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Security.Cryptography.Primitives.4.3.0\lib\net46\System.Security.Cryptography.Primitives.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
+        <Reference Include="System.Security.Cryptography.X509Certificates, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+          <HintPath>..\packages\System.Security.Cryptography.X509Certificates.4.3.0\lib\net461\System.Security.Cryptography.X509Certificates.dll</HintPath>
             <Private>false</Private>
         </Reference>
 
@@ -206,6 +246,7 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Commands\ReservedSlotsManagement\ReservedSlotsManagement.cs" />
         <Compile Include="Commands\CapybaraMode\CapybaraModeCommand.cs" />
         <Compile Include="Commands\IWantScp\IwsCommand.cs" />
         <Compile Include="Commands\IWantScp\IwsHandler.cs" />
@@ -213,8 +254,11 @@
         <Compile Include="Commands\JoinWave\JoinWaveHandler.cs" />
         <Compile Include="Commands\PlayerSize\PlayerSizeCommand.cs" />
         <Compile Include="Commands\RandomPlayerSelection\RandomPlayerSelectionCommand.cs" />
+        <Compile Include="Commands\ReservedSlotsManagement\RsmHandler.cs" />
+        <Compile Include="Commands\ReservedSlotsManagement\RsmHeader.cs" />
         <Compile Include="Commands\SpawnXmasTree.cs" />
         <Compile Include="Components\Extensions\PlayerExtensions.cs" />
+        <Compile Include="Components\Extensions\Utils.cs" />
         <Compile Include="Components\Features\Components\PlayerProperties.cs" />
         <Compile Include="Components\Features\Components\Interfaces\IPropertyModule.cs" />
         <Compile Include="Components\Features\CoroutineRunner.cs" />
@@ -225,6 +269,9 @@
     </ItemGroup>
     <ItemGroup>
       <Folder Include="Patches\" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="packages.config" />
     </ItemGroup>
     <!--<ItemGroup>
       <None Include="App.config" />

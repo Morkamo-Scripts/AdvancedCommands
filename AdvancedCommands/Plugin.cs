@@ -1,6 +1,7 @@
 ﻿using System;
 using AdvancedCommands.Commands.IWantScp;
 using AdvancedCommands.Commands.JoinWave;
+using AdvancedCommands.Commands.ReservedSlotsManagement;
 using AdvancedCommands.Components.Features;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
@@ -20,7 +21,7 @@ namespace AdvancedCommands
         public override string Prefix => Name;
         public override string Author => "Morkamo";
         public override Version RequiredExiledVersion => new(9, 1, 0);
-        public override Version Version => new(2, 0, 0);
+        public override Version Version => new(2, 1, 0);
 
         public static Plugin Instance;
         public static Harmony Harmony;
@@ -30,19 +31,24 @@ namespace AdvancedCommands
         
         public DateTime? LastSpawnTime { get; set; }
         public Team? LastSpawnTeam { get; set; }
-
-        /*public static Team? LastSpawnedTeam;*/
+        
+        public RsmHandler RsmHandler;
+        public RsmHeader RsmHeader;
         
         private void InitClasses()
         {
             JoinWaveHandler = Config.JoinWave;
             IwsHandler = new IwsHandler();
+            RsmHandler = new RsmHandler();
+            RsmHeader = Config.ReservedSlotManagement;
         }
 
         private void DeInitClasses()
         {
             JoinWaveHandler = null;
             IwsHandler = null;
+            RsmHeader = null;
+            RsmHandler = null;
         }
         
         private void RegisterEvents()
@@ -51,6 +57,7 @@ namespace AdvancedCommands
             events.Server.RespawningTeam += JoinWaveHandler.OnRespawningTeam;
             events.Player.Left += IwsHandler.LeftPlayer;
             events.Server.RoundEnded += IwsHandler.OnRoundEnded;
+            events.Player.ReservedSlot += RsmHandler.OnCheckReservedSlot;
         }
 
         private void UnregisterEvents()
@@ -59,6 +66,7 @@ namespace AdvancedCommands
             events.Server.RespawningTeam -= JoinWaveHandler.OnRespawningTeam;
             events.Player.Left -= IwsHandler.LeftPlayer;
             events.Server.RoundEnded -= IwsHandler.OnRoundEnded;
+            events.Player.ReservedSlot -= RsmHandler.OnCheckReservedSlot;
         }
         
         public override void OnEnabled()

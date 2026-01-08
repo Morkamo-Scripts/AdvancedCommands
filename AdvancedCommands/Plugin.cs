@@ -1,4 +1,5 @@
 ﻿using System;
+using AdvancedCommands.Commands.DisableScp2536;
 using AdvancedCommands.Commands.IWantScp;
 using AdvancedCommands.Commands.JoinWave;
 using AdvancedCommands.Commands.ReservedSlotsManagement;
@@ -21,7 +22,7 @@ namespace AdvancedCommands
         public override string Prefix => Name;
         public override string Author => "Morkamo";
         public override Version RequiredExiledVersion => new(9, 1, 0);
-        public override Version Version => new(2, 1, 0);
+        public override Version Version => new(2, 3, 0);
 
         public static Plugin Instance;
         public static Harmony Harmony;
@@ -30,10 +31,12 @@ namespace AdvancedCommands
         public IwsHandler IwsHandler;
         
         public DateTime? LastSpawnTime { get; set; }
-        public Team? LastSpawnTeam { get; set; }
+        public SquadTypes? LastSpawnedSquad { get; set; }
+        public bool IsWaveBlockedAnotherTeam = false;
         
         public RsmHandler RsmHandler;
         public RsmHeader RsmHeader;
+        public Disable2536Handler Disable2536Handler;
         
         private void InitClasses()
         {
@@ -41,6 +44,7 @@ namespace AdvancedCommands
             IwsHandler = new IwsHandler();
             RsmHandler = new RsmHandler();
             RsmHeader = Config.ReservedSlotManagement;
+            Disable2536Handler = new Disable2536Handler();
         }
 
         private void DeInitClasses()
@@ -49,24 +53,27 @@ namespace AdvancedCommands
             IwsHandler = null;
             RsmHeader = null;
             RsmHandler = null;
+            Disable2536Handler = null;
         }
         
         private void RegisterEvents()
         {
             events.Player.Verified += OnVerifiedPlayer;
-            events.Server.RespawningTeam += JoinWaveHandler.OnRespawningTeam;
+            events.Server.RespawnedTeam += JoinWaveHandler.OnRespawnedTeam;
             events.Player.Left += IwsHandler.LeftPlayer;
             events.Server.RoundEnded += IwsHandler.OnRoundEnded;
             events.Player.ReservedSlot += RsmHandler.OnCheckReservedSlot;
+            events.Scp2536.FindingPosition += Disable2536Handler.OnFindingSpawnPoint;
         }
 
         private void UnregisterEvents()
         {
             events.Player.Verified -= OnVerifiedPlayer;
-            events.Server.RespawningTeam -= JoinWaveHandler.OnRespawningTeam;
+            events.Server.RespawnedTeam -= JoinWaveHandler.OnRespawnedTeam;
             events.Player.Left -= IwsHandler.LeftPlayer;
             events.Server.RoundEnded -= IwsHandler.OnRoundEnded;
             events.Player.ReservedSlot -= RsmHandler.OnCheckReservedSlot;
+            events.Scp2536.FindingPosition -= Disable2536Handler.OnFindingSpawnPoint;
         }
         
         public override void OnEnabled()

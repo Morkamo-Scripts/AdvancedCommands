@@ -1,8 +1,11 @@
 ﻿using System;
 using AdvancedCommands.Components.Extensions;
 using CommandSystem;
+using Exiled.API.Enums;
 using Exiled.API.Extensions;
 using Exiled.API.Features;
+using Exiled.CustomItems.API.Features;
+using Exiled.CustomRoles.API.Features;
 using Exiled.Permissions.Extensions;
 using PlayerRoles;
 using Respawning;
@@ -63,9 +66,9 @@ public class JoinWaveCommand : ICommand
             return false;
         }
 
-        switch (Plugin.Instance.LastSpawnTeam)
+        switch (Plugin.Instance.LastSpawnedSquad)
         {
-            case Team.ChaosInsurgency:
+            case SquadTypes.ChaosInsurgency:
             {
                 var role = InstanceConfig().JoinWave.AllowedChaosInsurgencyRoles.GetRandomValue();
                 
@@ -75,7 +78,7 @@ public class JoinWaveCommand : ICommand
                 response = $"<color=green>Вы успешно появились за <b>{role}</b></color>";
                 return true;
             }
-            case Team.FoundationForces:
+            case SquadTypes.Ntf:
             {
                 var role = InstanceConfig().JoinWave.AllowedNtfRoles.GetRandomValue();
                 
@@ -83,6 +86,22 @@ public class JoinWaveCommand : ICommand
                 sender.AsPlayer().AdvancedCommand().PlayerProperties.HasBeenSpawned = true;
                 
                 response = $"<color=green>Вы успешно появились за <b>{role}</b></color>";
+                return true;
+            }
+            case SquadTypes.SerpentsHand:
+            {
+                CustomRole.Get(5)?.AddRole(sender.AsPlayer());
+                sender.AsPlayer().AdvancedCommand().PlayerProperties.HasBeenSpawned = true;
+                
+                sender.AsPlayer().AddItem(ItemType.GunCrossvec);
+                CustomItem.TryGive(sender.AsPlayer(), 7); // SHSupportKeycard
+                sender.AsPlayer().AddItem(ItemType.Medkit);
+                sender.AsPlayer().AddItem(ItemType.Painkillers);
+                sender.AsPlayer().AddItem(ItemType.Radio);
+                sender.AsPlayer().AddItem(ItemType.ArmorCombat);
+                sender.AsPlayer().AddAmmo(AmmoType.Nato9, 90);
+                
+                response = $"<color=green>Вы успешно появились за <b>Поддержку отряда 'Длань Змея'</b></color>";
                 return true;
             }
             default:

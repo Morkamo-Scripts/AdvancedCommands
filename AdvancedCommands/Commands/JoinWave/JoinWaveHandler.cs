@@ -29,14 +29,26 @@ public class JoinWaveHandler
         RoleTypeId.NtfPrivate,
     };
 
-    public void OnRespawningTeam(RespawningTeamEventArgs ev)
+    public void OnRespawnedTeam(RespawnedTeamEventArgs ev)
     {
+        if (Plugin.Instance.IsWaveBlockedAnotherTeam)
+            return;
+        
         Plugin.Instance.LastSpawnTime = DateTime.UtcNow;
-        Plugin.Instance.LastSpawnTeam = ev.Wave.Team;
+        
+        switch (ev.Wave.TargetFaction)
+        {
+            case Faction.FoundationStaff:
+                Plugin.Instance.LastSpawnedSquad = SquadTypes.Ntf;
+                break;
+            case Faction.FoundationEnemy:
+                Plugin.Instance.LastSpawnedSquad = SquadTypes.ChaosInsurgency;
+                break;
+        }
 
         foreach (var player in Player.List)
         {
-            player.AdvancedCommand().PlayerProperties.HasBeenSpawned = false;
-        } 
+            player.AdvancedCommand()?.PlayerProperties.HasBeenSpawned = false;
+        }
     }
 }

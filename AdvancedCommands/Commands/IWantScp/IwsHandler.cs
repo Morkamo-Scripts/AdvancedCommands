@@ -25,7 +25,7 @@ public class IwsHandler
     public HashSet<Player> LotteryMembers = new();
 
     public static float LotteryProcessingTime = 25;
-    public static float TimeForReplacement = 90;
+    public static float TimeForReplacement = 120;
     
     public bool IsLotteryProcessing = false;
     public bool IsLotteryClosed = false;

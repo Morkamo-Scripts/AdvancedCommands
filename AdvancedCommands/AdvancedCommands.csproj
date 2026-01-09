@@ -249,6 +249,8 @@
         <Compile Include="Commands\DisableScp2536\Disable2536Handler.cs" />
         <Compile Include="Commands\DisableScp2536\DisableScp2536Command.cs" />
         <Compile Include="Commands\JoinWave\SquadTypes.cs" />
+        <Compile Include="Commands\OwnerMode\OwnerModeCommand.cs" />
+        <Compile Include="Commands\OwnerMode\OwnerModeHandler.cs" />
         <Compile Include="Commands\ReservedSlotsManagement\ReservedSlotsManagement.cs" />
         <Compile Include="Commands\CapybaraMode\CapybaraModeCommand.cs" />
         <Compile Include="Commands\IWantScp\IwsCommand.cs" />
@@ -268,9 +270,6 @@
         <Compile Include="Config.cs" />
         <Compile Include="Plugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
-    </ItemGroup>
-    <ItemGroup>
-      <Folder Include="Patches\" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />

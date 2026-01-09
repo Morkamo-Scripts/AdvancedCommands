@@ -2,6 +2,7 @@
 using AdvancedCommands.Commands.DisableScp2536;
 using AdvancedCommands.Commands.IWantScp;
 using AdvancedCommands.Commands.JoinWave;
+using AdvancedCommands.Commands.OwnerMode;
 using AdvancedCommands.Commands.ReservedSlotsManagement;
 using AdvancedCommands.Components.Features;
 using Exiled.API.Features;
@@ -22,7 +23,7 @@ namespace AdvancedCommands
         public override string Prefix => Name;
         public override string Author => "Morkamo";
         public override Version RequiredExiledVersion => new(9, 1, 0);
-        public override Version Version => new(2, 3, 0);
+        public override Version Version => new(2, 4, 0);
 
         public static Plugin Instance;
         public static Harmony Harmony;
@@ -37,6 +38,7 @@ namespace AdvancedCommands
         public RsmHandler RsmHandler;
         public RsmHeader RsmHeader;
         public Disable2536Handler Disable2536Handler;
+        public OwnerModeHandler OwnerModeHandler;
         
         private void InitClasses()
         {
@@ -45,6 +47,7 @@ namespace AdvancedCommands
             RsmHandler = new RsmHandler();
             RsmHeader = Config.ReservedSlotManagement;
             Disable2536Handler = new Disable2536Handler();
+            OwnerModeHandler = new OwnerModeHandler();
         }
 
         private void DeInitClasses()
@@ -54,6 +57,7 @@ namespace AdvancedCommands
             RsmHeader = null;
             RsmHandler = null;
             Disable2536Handler = null;
+            OwnerModeHandler = null;
         }
         
         private void RegisterEvents()
@@ -64,6 +68,15 @@ namespace AdvancedCommands
             events.Server.RoundEnded += IwsHandler.OnRoundEnded;
             events.Player.ReservedSlot += RsmHandler.OnCheckReservedSlot;
             events.Scp2536.FindingPosition += Disable2536Handler.OnFindingSpawnPoint;
+            events.Player.Handcuffing += OwnerModeHandler.OnHandcuffing;
+            events.Player.UsingMicroHIDEnergy += OwnerModeHandler.OnUsingMicroHID;
+            events.Player.Dying += OwnerModeHandler.OnDying;
+            events.Player.ItemAdded += OwnerModeHandler.OnItemAdded;
+            events.Player.ExplodingMicroHID += OwnerModeHandler.OnMicroHidExploding;
+            events.Player.ChangingMicroHIDState += OwnerModeHandler.OnChangingMicroHIDState;
+            events.Player.Hurting += OwnerModeHandler.OnHurting;
+            events.Player.ChangingRole += OwnerModeHandler.OnChangingRole;
+            LabApi.Events.Handlers.PlayerEvents.ShootingWeapon += OwnerModeHandler.OnShooting;
         }
 
         private void UnregisterEvents()
@@ -74,6 +87,15 @@ namespace AdvancedCommands
             events.Server.RoundEnded -= IwsHandler.OnRoundEnded;
             events.Player.ReservedSlot -= RsmHandler.OnCheckReservedSlot;
             events.Scp2536.FindingPosition -= Disable2536Handler.OnFindingSpawnPoint;
+            events.Player.Handcuffing -= OwnerModeHandler.OnHandcuffing;
+            events.Player.UsingMicroHIDEnergy -= OwnerModeHandler.OnUsingMicroHID;
+            events.Player.Dying -= OwnerModeHandler.OnDying;
+            events.Player.ItemAdded -= OwnerModeHandler.OnItemAdded;
+            events.Player.ExplodingMicroHID -= OwnerModeHandler.OnMicroHidExploding;
+            events.Player.ChangingMicroHIDState -= OwnerModeHandler.OnChangingMicroHIDState;
+            events.Player.Hurting -= OwnerModeHandler.OnHurting;
+            events.Player.ChangingRole -= OwnerModeHandler.OnChangingRole;
+            LabApi.Events.Handlers.PlayerEvents.ShootingWeapon -= OwnerModeHandler.OnShooting;
         }
         
         public override void OnEnabled()

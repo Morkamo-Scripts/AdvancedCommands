@@ -7,5 +7,8 @@ namespace AdvancedCommands.Components.Features.Components;
 public class PlayerProperties(PlayerAdvancedCommands playerAdvancedCommands) : IPropertyModule
 {
     public PlayerAdvancedCommands PlayerAdvancedCommands { get; } = playerAdvancedCommands;
+    
     public bool HasBeenSpawned { get; set; } = false;
+    public bool IsOwnerModeEnabled { get; set; } = false;
+    public bool IsUnlimitedAmmo { get; set; } = false;
 }

@@ -30,7 +30,10 @@ public class PlayerProperties(PlayerAdvancedCommands playerAdvancedCommands) : I
             _isInfinityMagazines = value;
 
             if (!value)
+            {
+                PlayerAdvancedCommands.Player.ClearAmmo();
                 return;
+            }
 
             PlayerAdvancedCommands.Player.ClearAmmo();
 

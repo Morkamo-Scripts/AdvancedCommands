@@ -67,8 +67,12 @@ public class OwnerModeHandler
 
     public void OnDying(DyingEventArgs ev)
     {
-        if (ev.Player.AdvancedCommand().PlayerProperties.IsOwnerModeEnabled)
-            ev.IsAllowed = false;
+        try
+        {
+            if (ev.Player.AdvancedCommand().PlayerProperties.IsOwnerModeEnabled)
+                ev.IsAllowed = false;
+        }
+        catch { /*ignored*/ }
     }
 
     public void OnShooting(PlayerShootingWeaponEventArgs ev)
@@ -125,7 +129,7 @@ public class OwnerModeHandler
 
     public void OnChangingRole(ChangingRoleEventArgs ev)
     {
-        if (ev.Player.AdvancedCommand().PlayerProperties.IsOwnerModeEnabled)
+        if (ev.Player.AdvancedCommand() != null && ev.Player.AdvancedCommand().PlayerProperties.IsOwnerModeEnabled)
         {
             ev.IsAllowed = false;
             RueDisplay.Get(ev.Player).Show(

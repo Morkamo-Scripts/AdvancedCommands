@@ -246,9 +246,23 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="Commands\AddAhp\AddAhpCommand.cs" />
+        <Compile Include="Commands\AddHs\AddHsCommand.cs" />
+        <Compile Include="Commands\CallScp956\CallScp956Command.cs" />
         <Compile Include="Commands\DisableScp2536\Disable2536Handler.cs" />
         <Compile Include="Commands\DisableScp2536\DisableScp2536Command.cs" />
+        <Compile Include="Commands\ElevalorLock\ElevalorsLockCommand.cs" />
+        <Compile Include="Commands\ElevalorLock\ElevalorsLockHandler.cs" />
+        <Compile Include="Commands\GlobalInfinityRadio\GlobalInfinityRadioCommand.cs" />
+        <Compile Include="Commands\GlobalInfinityRadio\GlobalInfinityRadioHandler.cs" />
+        <Compile Include="Commands\InfinityJailbird\InfinityJailbirdCommand.cs" />
+        <Compile Include="Commands\InfinityMagazines\InfinityMagazinesCommand.cs" />
+        <Compile Include="Commands\InfinityMagazines\InfinityMagazinesHandler.cs" />
+        <Compile Include="Commands\ItsMyScp\ItsMyScpHandler.cs" />
+        <Compile Include="Commands\ItsMyScp\ItsMyScpCommand.cs" />
         <Compile Include="Commands\JoinWave\SquadTypes.cs" />
+        <Compile Include="Commands\NonBreakableGlass\NonBreakableGlassCommand.cs" />
+        <Compile Include="Commands\NonBreakableGlass\NonBreakableGlassHandler.cs" />
         <Compile Include="Commands\OwnerMode\OwnerModeCommand.cs" />
         <Compile Include="Commands\OwnerMode\OwnerModeHandler.cs" />
         <Compile Include="Commands\ReservedSlotsManagement\ReservedSlotsManagement.cs" />
@@ -261,6 +275,8 @@
         <Compile Include="Commands\RandomPlayerSelection\RandomPlayerSelectionCommand.cs" />
         <Compile Include="Commands\ReservedSlotsManagement\RsmHandler.cs" />
         <Compile Include="Commands\ReservedSlotsManagement\RsmHeader.cs" />
+        <Compile Include="Commands\SerpentHandsWave\SerpentHandsWaveCommand.cs" />
+        <Compile Include="Commands\SerpentHandsWave\SerpentHandsWaveHandler.cs" />
         <Compile Include="Components\Extensions\PlayerExtensions.cs" />
         <Compile Include="Components\Extensions\Utils.cs" />
         <Compile Include="Components\Features\Components\PlayerProperties.cs" />
@@ -268,6 +284,7 @@
         <Compile Include="Components\Features\CoroutineRunner.cs" />
         <Compile Include="Components\Features\PlayerAdvancedCommands.cs" />
         <Compile Include="Config.cs" />
+        <Compile Include="Patches\JailbirdWearStatePatch.cs" />
         <Compile Include="Plugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>

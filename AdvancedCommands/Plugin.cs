@@ -1,7 +1,11 @@
 ﻿using System;
 using AdvancedCommands.Commands.DisableScp2536;
+using AdvancedCommands.Commands.GlobalInfinityRadio;
+using AdvancedCommands.Commands.InfinityMagazines;
+using AdvancedCommands.Commands.ItsMyScp;
 using AdvancedCommands.Commands.IWantScp;
 using AdvancedCommands.Commands.JoinWave;
+using AdvancedCommands.Commands.NonBreakableGlass;
 using AdvancedCommands.Commands.OwnerMode;
 using AdvancedCommands.Commands.ReservedSlotsManagement;
 using AdvancedCommands.Components.Features;
@@ -23,7 +27,7 @@ namespace AdvancedCommands
         public override string Prefix => Name;
         public override string Author => "Morkamo";
         public override Version RequiredExiledVersion => new(9, 1, 0);
-        public override Version Version => new(2, 4, 0);
+        public override Version Version => new(2, 5, 0);
 
         public static Plugin Instance;
         public static Harmony Harmony;
@@ -39,6 +43,10 @@ namespace AdvancedCommands
         public RsmHeader RsmHeader;
         public Disable2536Handler Disable2536Handler;
         public OwnerModeHandler OwnerModeHandler;
+        public ItsMyScpHandler ItsMyScpHandler;
+        public InfinityMagazinesHandler InfinityMagazinesHandler;
+        public NonBreakableGlassHandler NonBreakableGlassHandler;
+        public GlobalInfinityRadioHandler GlobalInfinityRadioHandler;
         
         private void InitClasses()
         {
@@ -48,6 +56,10 @@ namespace AdvancedCommands
             RsmHeader = Config.ReservedSlotManagement;
             Disable2536Handler = new Disable2536Handler();
             OwnerModeHandler = new OwnerModeHandler();
+            ItsMyScpHandler = new ItsMyScpHandler();
+            InfinityMagazinesHandler = new InfinityMagazinesHandler();
+            NonBreakableGlassHandler = new NonBreakableGlassHandler();
+            GlobalInfinityRadioHandler = new GlobalInfinityRadioHandler();
         }
 
         private void DeInitClasses()
@@ -58,6 +70,10 @@ namespace AdvancedCommands
             RsmHandler = null;
             Disable2536Handler = null;
             OwnerModeHandler = null;
+            ItsMyScpHandler = null;
+            InfinityMagazinesHandler = null;
+            NonBreakableGlassHandler = null;
+            GlobalInfinityRadioHandler = null;
         }
         
         private void RegisterEvents()
@@ -76,6 +92,14 @@ namespace AdvancedCommands
             events.Player.ChangingMicroHIDState += OwnerModeHandler.OnChangingMicroHIDState;
             events.Player.Hurting += OwnerModeHandler.OnHurting;
             events.Player.ChangingRole += OwnerModeHandler.OnChangingRole;
+            events.Player.Spawning += ItsMyScpHandler.OnSpawning;
+            events.Server.RoundEnded += ItsMyScpHandler.OnRoundEnded;
+            events.Player.DroppingAmmo += InfinityMagazinesHandler.OnDroppingAmmo;
+            events.Player.Dying += InfinityMagazinesHandler.OnDying;
+            events.Player.ReloadedWeapon += InfinityMagazinesHandler.OnReloadedWeapon;
+            events.Player.DamagingWindow += NonBreakableGlassHandler.OnDamagingWindow;
+            events.Player.UsingRadioBattery += GlobalInfinityRadioHandler.OnUsingRadioBattery;
+            LabApi.Events.Handlers.PlayerEvents.ChangedRole += InfinityMagazinesHandler.OnChangedRole;
             LabApi.Events.Handlers.PlayerEvents.ShootingWeapon += OwnerModeHandler.OnShooting;
         }
 
@@ -95,6 +119,14 @@ namespace AdvancedCommands
             events.Player.ChangingMicroHIDState -= OwnerModeHandler.OnChangingMicroHIDState;
             events.Player.Hurting -= OwnerModeHandler.OnHurting;
             events.Player.ChangingRole -= OwnerModeHandler.OnChangingRole;
+            events.Player.Spawning -= ItsMyScpHandler.OnSpawning;
+            events.Server.RoundEnded -= ItsMyScpHandler.OnRoundEnded;
+            events.Player.DroppingAmmo -= InfinityMagazinesHandler.OnDroppingAmmo;
+            events.Player.Dying -= InfinityMagazinesHandler.OnDying;
+            events.Player.ReloadedWeapon -= InfinityMagazinesHandler.OnReloadedWeapon;
+            events.Player.DamagingWindow -= NonBreakableGlassHandler.OnDamagingWindow;
+            events.Player.UsingRadioBattery -= GlobalInfinityRadioHandler.OnUsingRadioBattery;
+            LabApi.Events.Handlers.PlayerEvents.ChangedRole -= InfinityMagazinesHandler.OnChangedRole;
             LabApi.Events.Handlers.PlayerEvents.ShootingWeapon -= OwnerModeHandler.OnShooting;
         }
         
@@ -123,6 +155,9 @@ namespace AdvancedCommands
         
         private void OnVerifiedPlayer(VerifiedEventArgs ev)
         {
+            if (ev.Player.IsNPC)
+                return;
+            
             if (ev.Player.ReferenceHub.gameObject.GetComponent<PlayerAdvancedCommands>() != null)
                 return;
 

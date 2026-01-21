@@ -39,6 +39,13 @@ public class CallAdminCommand : ICommand
             return false;
         }
 
+        var cfg = Plugin.Instance.Config;
+        if (!cfg.CallAdminSettings.AllowedServers.Contains(cfg.ServerIdentifier))
+        {
+            response = "<color=orange>Команда не разрешена на данном сервере!</color>";
+            return false;
+        }
+
         if (!DisableCallsCommand.IsCallsEnabled)
         {
             response = "<color=orange>Администратор отключил вызовы в этом раунде!</color>";
@@ -77,11 +84,11 @@ public class CallAdminCommand : ICommand
 
         if (isNotFoundAnyone)
         {
-            response = "<color=orange>Не удалось найти хотя бы одного администратора, " +
+            response = "<color=orange>Не удалось найти хотя бы одного администратора соответствующей группы, " +
                        "который мог бы получить ваше сообщение. Если администратор присутствует на сервере, " +
                        "попросите его отключить спящий режим!</color>";
             return false;
-        }
+        } 
         
         sender.AsPlayer().AdvancedCommand().PlayerProperties.LastCall = DateTime.UtcNow;
         response = "<color=green>Ваше сообщение отправлено!</color>";

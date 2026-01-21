@@ -11,6 +11,8 @@ namespace AdvancedCommands
     {
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = false;
+
+        public string ServerIdentifier { get; set; } = "Classic";
         
         [Description("Спавнит игрока в недавно прибывшем отряде в течение овертайма.")]
         public JoinWaveHandler JoinWave { get; set; } = new();
@@ -25,5 +27,8 @@ namespace AdvancedCommands
         [Description("Выводит этим группам список ожидающих игроков!")]
         // ReSharper disable once CollectionNeverUpdated.Global
         public HashSet<string> AdminGroups { get; set; } = new();
+
+        [Description("Сервера, на которых разршена данная команда!")]
+        public HashSet<string> AllowedServers { get; set; } = ["OnlyEvents"];
     }
 }

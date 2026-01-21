@@ -78,7 +78,7 @@ public class CallAdminCommand : ICommand
                 isNotFoundAnyone = false;
             
             player.Broadcast(10, $"<b><color=#ffbc2b>" +
-                                $"Игрок <color=#c72bff>{sender.AsPlayer().Nickname}</color>\n вызывает администратора!" +
+                                $"Игрок <color=#c72bff>[{sender.AsPlayer().Id}] {sender.AsPlayer().Nickname}</color>\n вызывает администратора!" +
                                 $"</color></b>");
         }
 

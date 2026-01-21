@@ -1,4 +1,5 @@
 ﻿using System;
+using AdvancedCommands.Commands.CallAdmin;
 using AdvancedCommands.Commands.DisableScp2536;
 using AdvancedCommands.Commands.GlobalInfinityRadio;
 using AdvancedCommands.Commands.InfinityMagazines;
@@ -9,6 +10,7 @@ using AdvancedCommands.Commands.NonBreakableGlass;
 using AdvancedCommands.Commands.OwnerMode;
 using AdvancedCommands.Commands.ReservedSlotsManagement;
 using AdvancedCommands.Components.Features;
+using AdvancedCommands.Events;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
 using HarmonyLib;
@@ -27,7 +29,7 @@ namespace AdvancedCommands
         public override string Prefix => Name;
         public override string Author => "Morkamo";
         public override Version RequiredExiledVersion => new(9, 1, 0);
-        public override Version Version => new(2, 5, 0);
+        public override Version Version => new(2, 6, 0);
 
         public static Plugin Instance;
         public static Harmony Harmony;

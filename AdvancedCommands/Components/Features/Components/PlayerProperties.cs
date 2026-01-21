@@ -41,4 +41,7 @@ public class PlayerProperties(PlayerAdvancedCommands playerAdvancedCommands) : I
                 PlayerAdvancedCommands.Player.AddAmmo(type, 1000);
         }
     }
+
+    public DateTime? LastCall { get; set; }
+    public bool ImSleeping { get; set; } = false;
 }

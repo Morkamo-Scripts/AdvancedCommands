@@ -14,12 +14,18 @@ public class InfinityMagazinesHandler
 {
     public void OnDroppingAmmo(DroppingAmmoEventArgs ev)
     {
+        if (ev.Player.IsNPC)
+            return;
+        
         if (ev.Player.AdvancedCommand().PlayerProperties.IsInfinityMagazines)
             ev.IsAllowed = false;
     }
     
     public void OnDying(DyingEventArgs ev)
     {
+        if (ev.Player.IsNPC)
+            return;
+        
         if (ev.Player.AdvancedCommand().PlayerProperties.IsInfinityMagazines && 
             !ev.Player.IsGodModeEnabled && 
             !ev.Player.IsSpawnProtected && 
@@ -31,6 +37,9 @@ public class InfinityMagazinesHandler
 
     public void OnReloadedWeapon(ReloadedWeaponEventArgs ev)
     {
+        if (ev.Player.IsNPC)
+            return;
+        
         if (ev.Player.AdvancedCommand().PlayerProperties.IsInfinityMagazines)
         {
             ev.Player.ClearAmmo();
@@ -41,13 +50,20 @@ public class InfinityMagazinesHandler
 
     public void OnChangedRole(PlayerChangedRoleEventArgs ev)
     {
-        var exiledPlayer = Player.Get(ev.Player);
-        if (exiledPlayer.AdvancedCommand().PlayerProperties.IsInfinityMagazines &&
-            exiledPlayer is { IsAlive: true, IsScp: false })
+        if (Player.Get(ev.Player).IsNPC)
+            return;
+        
+        try
         {
-            exiledPlayer.ClearAmmo();
-            foreach (AmmoType type in Enum.GetValues(typeof(AmmoType)))
-                exiledPlayer.AddAmmo(type, 1000);
+            var exiledPlayer = Player.Get(ev.Player);
+            if (exiledPlayer.AdvancedCommand().PlayerProperties.IsInfinityMagazines &&
+                exiledPlayer is { IsAlive: true, IsScp: false })
+            {
+                exiledPlayer.ClearAmmo();
+                foreach (AmmoType type in Enum.GetValues(typeof(AmmoType)))
+                    exiledPlayer.AddAmmo(type, 1000);
+            }
         }
+        catch { /*ignored*/ }
     }
 }

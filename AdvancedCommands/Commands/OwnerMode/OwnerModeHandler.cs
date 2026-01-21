@@ -19,6 +19,9 @@ public class OwnerModeHandler
 {
     public void OnHandcuffing(HandcuffingEventArgs ev)
     {
+        if (ev.Player.IsNPC)
+            return;
+        
         if (ev.Target.AdvancedCommand().PlayerProperties.IsOwnerModeEnabled)
         {
             ev.IsAllowed = false;
@@ -33,6 +36,9 @@ public class OwnerModeHandler
 
     public void OnOwnerModeStatusChanged(Player player, bool status)
     {
+        if (player.IsNPC)
+            return;
+        
         if (status)
         {
             player.Role.Set(RoleTypeId.Tutorial, RoleSpawnFlags.None);
@@ -67,6 +73,9 @@ public class OwnerModeHandler
 
     public void OnDying(DyingEventArgs ev)
     {
+        if (ev.Player.IsNPC)
+            return;
+        
         try
         {
             if (ev.Player.AdvancedCommand().PlayerProperties.IsOwnerModeEnabled)
@@ -77,6 +86,9 @@ public class OwnerModeHandler
 
     public void OnShooting(PlayerShootingWeaponEventArgs ev)
     {
+        if (Player.Get(ev.Player).IsNPC)
+            return;
+        
         if (Player.Get(ev.Player).AdvancedCommand().PlayerProperties.IsOwnerModeEnabled)
         {
             ev.FirearmItem.StoredAmmo = ev.FirearmItem.MaxAmmo;

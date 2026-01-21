@@ -10,6 +10,9 @@ public class GlobalInfinityRadioHandler
 
     public void OnUsingRadioBattery(UsingRadioBatteryEventArgs ev)
     {
+        if (ev.Player.IsNPC)
+            return;
+        
         if (IsEnabled)
         {
             ev.Radio.BatteryLevel = 100;

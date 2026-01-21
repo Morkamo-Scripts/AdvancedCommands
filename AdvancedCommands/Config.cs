@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using AdvancedCommands.Commands.IWantScp;
 using AdvancedCommands.Commands.JoinWave;
 using AdvancedCommands.Commands.ReservedSlotsManagement;
@@ -15,5 +16,14 @@ namespace AdvancedCommands
         public JoinWaveHandler JoinWave { get; set; } = new();
 
         public RsmHeader ReservedSlotManagement { get; set; } = new();
+        
+        public CallAdminSettings CallAdminSettings { get; set; } = new();
+    }
+
+    public class CallAdminSettings
+    {
+        [Description("Выводит этим группам список ожидающих игроков!")]
+        // ReSharper disable once CollectionNeverUpdated.Global
+        public HashSet<string> AdminGroups { get; set; } = new();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AdvancedCommands.Components.Extensions;
 using CommandSystem;
 using Exiled.API.Enums;
@@ -7,8 +8,10 @@ using Exiled.API.Features;
 using Exiled.CustomItems.API.Features;
 using Exiled.CustomRoles.API.Features;
 using Exiled.Permissions.Extensions;
+using MEC;
 using PlayerRoles;
 using Respawning;
+using UnityEngine;
 
 namespace AdvancedCommands.Commands.JoinWave;
 
@@ -100,6 +103,16 @@ public class JoinWaveCommand : ICommand
                 sender.AsPlayer().AddItem(ItemType.Radio);
                 sender.AsPlayer().AddItem(ItemType.ArmorCombat);
                 sender.AsPlayer().AddAmmo(AmmoType.Nato9, 90);
+                
+                List<Vector3> spawnPoints =
+                [
+                    new Vector3(14.6f, 292, -45.35f), // Support 1
+                    new Vector3(13.3f, 292, -43.1f), // Support 2
+                    new Vector3(13.4f, 292, -40.25f), // Support 3
+                    new Vector3(15.5f, 292, -40.0f) // Support 4
+                ];
+
+                Timing.CallDelayed(1f, () => sender.AsPlayer().Teleport(spawnPoints.GetRandomValue()));
                 
                 response = $"<color=green>Вы успешно появились за <b>Поддержку отряда 'Длань Змея'</b></color>";
                 return true;

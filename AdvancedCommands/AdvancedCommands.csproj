@@ -248,11 +248,13 @@
     <ItemGroup>
         <Compile Include="Commands\AddAhp\AddAhpCommand.cs" />
         <Compile Include="Commands\AddHs\AddHsCommand.cs" />
+        <Compile Include="Commands\CallAdmin\CallAdminCommand.cs" />
+        <Compile Include="Commands\CallAdmin\Subcommands\DisableCallsCommands.cs" />
+        <Compile Include="Commands\CallAdmin\Subcommands\ImSleepingCommand.cs" />
         <Compile Include="Commands\CallScp956\CallScp956Command.cs" />
         <Compile Include="Commands\DisableScp2536\Disable2536Handler.cs" />
         <Compile Include="Commands\DisableScp2536\DisableScp2536Command.cs" />
         <Compile Include="Commands\ElevalorLock\ElevalorsLockCommand.cs" />
-        <Compile Include="Commands\ElevalorLock\ElevalorsLockHandler.cs" />
         <Compile Include="Commands\GlobalInfinityRadio\GlobalInfinityRadioCommand.cs" />
         <Compile Include="Commands\GlobalInfinityRadio\GlobalInfinityRadioHandler.cs" />
         <Compile Include="Commands\InfinityJailbird\InfinityJailbirdCommand.cs" />
@@ -284,6 +286,11 @@
         <Compile Include="Components\Features\CoroutineRunner.cs" />
         <Compile Include="Components\Features\PlayerAdvancedCommands.cs" />
         <Compile Include="Config.cs" />
+        <Compile Include="Events\Components\ICancelableEvent.cs" />
+        <Compile Include="Events\EventArgs\Player\PlayerCalledAdminEventArgs.cs" />
+        <Compile Include="Events\EventArgs\Player\PlayerFullConnectedEventArgs.cs" />
+        <Compile Include="Events\EventManager.cs" />
+        <Compile Include="Events\PlayerEvents.cs" />
         <Compile Include="Patches\JailbirdWearStatePatch.cs" />
         <Compile Include="Plugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>

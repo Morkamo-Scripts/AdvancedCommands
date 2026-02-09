@@ -56,7 +56,7 @@ public class CallAdminCommand : ICommand
 
         if (lastCall.HasValue)
         {
-            var timeRate = 90;
+            var timeRate = 40;
             var elapsed = DateTime.UtcNow - lastCall.Value;
 
             if (elapsed.TotalSeconds < timeRate)

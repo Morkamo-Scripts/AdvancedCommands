@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using AdvancedCommands.Components.Extensions;
 using CommandSystem;
 using Exiled.API.Features;
@@ -51,4 +51,4 @@ public class OwnerModeCommand : ICommand
     {
         return Plugin.Instance.Config;
     }
-}
+}*/

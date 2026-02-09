@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using AdvancedCommands.Components.Extensions;
 using CommandSystem.Commands.RemoteAdmin;
 using Exiled.API.Enums;
@@ -81,7 +81,7 @@ public class OwnerModeHandler
             if (ev.Player.AdvancedCommand().PlayerProperties.IsOwnerModeEnabled)
                 ev.IsAllowed = false;
         }
-        catch { /*ignored*/ }
+        catch { /*ignored#1# }
     }
 
     public void OnShooting(PlayerShootingWeaponEventArgs ev)
@@ -136,7 +136,7 @@ public class OwnerModeHandler
                 firearm.MagazineAmmo = firearm.MaxMagazineAmmo;
             }
         }
-        catch { /*ignored*/ }
+        catch { /*ignored#1# }
     }
 
     public void OnChangingRole(ChangingRoleEventArgs ev)
@@ -152,4 +152,4 @@ public class OwnerModeHandler
             Timing.CallDelayed(3.2f, () => RueDisplay.Get(ev.Player).Update());
         }
     }
-}
+}*/

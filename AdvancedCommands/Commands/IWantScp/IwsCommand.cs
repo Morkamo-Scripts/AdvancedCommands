@@ -1,4 +1,5 @@
 ﻿using System;
+using AdvancedCommands.Components;
 using AdvancedCommands.Components.Extensions;
 using CommandSystem;
 using Exiled.API.Extensions;
@@ -10,14 +11,22 @@ namespace AdvancedCommands.Commands.IWantScp;
 
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class IwsCommand : ICommand
+public class IwsCommand : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpIWantScp.IsActive ?? false;
+
     public string Command { get; } = "IWantScp";
     public string[] Aliases { get; } = { "iws" };
     public string Description { get; } = "Добавляет вас в список участников лотерей на замену вышедшего SCP.";
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (!Plugin.Instance.IwsHandler.IsLotteryProcessing)
         {
             response = "<color=orange>Сейчас лотерея не проводится!</color>";

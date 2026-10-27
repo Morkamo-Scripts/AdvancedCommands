@@ -1,4 +1,6 @@
 ﻿using System;
+using AdvancedCommands.Components;
+using CameraShaking;
 using CommandSystem;
 using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
@@ -7,14 +9,26 @@ namespace AdvancedCommands.Commands.SerpentHandsWave;
 
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class SerpentHandsWaveCommand : ICommand
+public class SerpentHandsWaveCommand : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpSerpentHandsWave.IsActive ?? false;
+
     public string Command { get; } = "serpentHandsWave";
     public string[] Aliases { get; } = { "shw" };
     public string Description { get; } = "Устанавливает или отменяет приезд отряда Длани Змемя в следующей волне.";
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
+        var player = Player.Get(sender);
+
+        /*player.ReferenceHub.GetComponent<CameraShakeController>().CamerasFOV = 180;*/
+
         if (!sender.CheckPermission("ac.shw"))
         {
             string requestPermission = "Требуется разрешение - 'ac.shw'";
@@ -25,6 +39,12 @@ public class SerpentHandsWaveCommand : ICommand
             else
                 response = "<color=red>Вы не имеете права использовать данную команду!</color>";
             
+            return false;
+        }
+
+        if (Plugin.Instance.Config.ServerIdentifier == "Classic")
+        {
+            response = "<color=orange>Команда недоступна на этом сервере!</color>";
             return false;
         }
         

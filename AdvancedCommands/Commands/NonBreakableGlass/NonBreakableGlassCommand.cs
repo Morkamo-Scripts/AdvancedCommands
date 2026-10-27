@@ -1,4 +1,5 @@
 ﻿using System;
+using AdvancedCommands.Components;
 using AdvancedCommands.Components.Extensions;
 using CommandSystem;
 using Exiled.API.Features;
@@ -8,14 +9,22 @@ namespace AdvancedCommands.Commands.NonBreakableGlass;
 
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class NonBreakableGlassCommand : ICommand
+public class NonBreakableGlassCommand : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpNonBreakableGlass.IsActive ?? false;
+
     public string Command { get; } = "nonBreakableGlass";
     public string[] Aliases { get; } = { "nbg" };
     public string Description { get; } = "Включает или отключает режим небьющегося стекла!";
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (!sender.CheckPermission("ac.nbg"))
         {
             string requestPermission = "Требуется разрешение - 'ac.nbg'";

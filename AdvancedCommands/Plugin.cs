@@ -1,11 +1,13 @@
 ﻿using System;
 using AdvancedCommands.Commands.CallAdmin;
+using AdvancedCommands.Commands.CapybaraMode;
 using AdvancedCommands.Commands.DisableScp2536;
 using AdvancedCommands.Commands.GlobalInfinityRadio;
 using AdvancedCommands.Commands.InfinityMagazines;
 using AdvancedCommands.Commands.ItsMyScp;
 using AdvancedCommands.Commands.IWantScp;
 using AdvancedCommands.Commands.JoinWave;
+using AdvancedCommands.Commands.MiyabiMode;
 using AdvancedCommands.Commands.NonBreakableGlass;
 /*using AdvancedCommands.Commands.OwnerMode;*/
 using AdvancedCommands.Commands.ReservedSlotsManagement;
@@ -31,7 +33,7 @@ namespace AdvancedCommands
         public override string Prefix => Name;
         public override string Author => "Morkamo";
         public override Version RequiredExiledVersion => new(9, 1, 0);
-        public override Version Version => new(2, 7, 0);
+        public override Version Version => new(2, 8, 0);
 
         public static Plugin Instance;
         public static Harmony Harmony;
@@ -51,6 +53,8 @@ namespace AdvancedCommands
         public InfinityMagazinesHandler InfinityMagazinesHandler;
         public NonBreakableGlassHandler NonBreakableGlassHandler;
         public GlobalInfinityRadioHandler GlobalInfinityRadioHandler;
+        public CapybaraModeHandler CapybaraModeHandler;
+        public MiyabiModeHandler MiyabiModeHandler;
         
         private void InitClasses()
         {
@@ -64,6 +68,8 @@ namespace AdvancedCommands
             InfinityMagazinesHandler = new InfinityMagazinesHandler();
             NonBreakableGlassHandler = new NonBreakableGlassHandler();
             GlobalInfinityRadioHandler = new GlobalInfinityRadioHandler();
+            CapybaraModeHandler = new CapybaraModeHandler();
+            MiyabiModeHandler = new MiyabiModeHandler();
         }
 
         private void DeInitClasses()
@@ -78,6 +84,8 @@ namespace AdvancedCommands
             InfinityMagazinesHandler = null;
             NonBreakableGlassHandler = null;
             GlobalInfinityRadioHandler = null;
+            CapybaraModeHandler = null;
+            MiyabiModeHandler = null;
         }
         
         private void RegisterEvents()
@@ -96,13 +104,17 @@ namespace AdvancedCommands
             events.Player.ChangingMicroHIDState += OwnerModeHandler.OnChangingMicroHIDState;
             events.Player.Hurting += OwnerModeHandler.OnHurting;
             events.Player.ChangingRole += OwnerModeHandler.OnChangingRole;*/
-            events.Player.Spawning += ItsMyScpHandler.OnSpawning;
+            events.Player.Left += ItsMyScpHandler.OnPlayerLeft;
             events.Server.RoundEnded += ItsMyScpHandler.OnRoundEnded;
+            events.Server.RestartingRound += ItsMyScpHandler.OnRestartingRound;
+            events.Server.WaitingForPlayers += ItsMyScpHandler.OnWaitingForPlayers;
             events.Player.DroppingAmmo += InfinityMagazinesHandler.OnDroppingAmmo;
             events.Player.Dying += InfinityMagazinesHandler.OnDying;
             events.Player.ReloadedWeapon += InfinityMagazinesHandler.OnReloadedWeapon;
             events.Player.DamagingWindow += NonBreakableGlassHandler.OnDamagingWindow;
             events.Player.UsingRadioBattery += GlobalInfinityRadioHandler.OnUsingRadioBattery;
+            events.Player.Left += CapybaraModeHandler.OnPlayerLeft;
+            events.Player.Left += MiyabiModeHandler.OnPlayerLeft;
             LabApi.Events.Handlers.PlayerEvents.ChangedRole += InfinityMagazinesHandler.OnChangedRole;
             /*LabApi.Events.Handlers.PlayerEvents.ShootingWeapon += OwnerModeHandler.OnShooting;*/
             events.Player.Jumping += Jump;
@@ -124,13 +136,17 @@ namespace AdvancedCommands
             events.Player.ChangingMicroHIDState -= OwnerModeHandler.OnChangingMicroHIDState;
             events.Player.Hurting -= OwnerModeHandler.OnHurting;
             events.Player.ChangingRole -= OwnerModeHandler.OnChangingRole;*/
-            events.Player.Spawning -= ItsMyScpHandler.OnSpawning;
+            events.Player.Left -= ItsMyScpHandler.OnPlayerLeft;
             events.Server.RoundEnded -= ItsMyScpHandler.OnRoundEnded;
+            events.Server.RestartingRound -= ItsMyScpHandler.OnRestartingRound;
+            events.Server.WaitingForPlayers -= ItsMyScpHandler.OnWaitingForPlayers;
             events.Player.DroppingAmmo -= InfinityMagazinesHandler.OnDroppingAmmo;
             events.Player.Dying -= InfinityMagazinesHandler.OnDying;
             events.Player.ReloadedWeapon -= InfinityMagazinesHandler.OnReloadedWeapon;
             events.Player.DamagingWindow -= NonBreakableGlassHandler.OnDamagingWindow;
             events.Player.UsingRadioBattery -= GlobalInfinityRadioHandler.OnUsingRadioBattery;
+            events.Player.Left -= CapybaraModeHandler.OnPlayerLeft;
+            events.Player.Left -= MiyabiModeHandler.OnPlayerLeft;
             LabApi.Events.Handlers.PlayerEvents.ChangedRole -= InfinityMagazinesHandler.OnChangedRole;
             /*LabApi.Events.Handlers.PlayerEvents.ShootingWeapon -= OwnerModeHandler.OnShooting;*/
             events.Player.Jumping -= Jump;
@@ -156,6 +172,7 @@ namespace AdvancedCommands
         public override void OnDisabled()
         {
             UnregisterEvents();
+            global::AdvancedCommands.Commands.ItsMyScp.ItsMyScpHandler.ClearReservations();
             DeInitClasses();
             
             Harmony.UnpatchAll();

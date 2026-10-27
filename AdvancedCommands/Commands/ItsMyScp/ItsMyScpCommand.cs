@@ -1,23 +1,32 @@
 ﻿using System;
-using System.Linq;
+using AdvancedCommands.Components;
 using AdvancedCommands.Components.Extensions;
 using CommandSystem;
 using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
 using PlayerRoles;
+using PlayerRoles.RoleAssign;
 
 namespace AdvancedCommands.Commands.ItsMyScp;
 
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class ItsMyScpCommand : ICommand
+public class ItsMyScpCommand : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpItsMyScp.IsActive ?? false;
+
     public string Command { get; } = "itsMyScp";
     public string[] Aliases { get; } = { "ims" };
     public string Description { get; } = "Бронирует указанную роль SCP для выбранного игрока!";
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (!sender.CheckPermission("ac.itsMyScp"))
         {
             string requestPermission = "Требуется разрешение - 'ac.itsMyScp'";
@@ -31,19 +40,33 @@ public class ItsMyScpCommand : ICommand
             return false;
         }
 
-        if (Round.IsStarted)
+        if (Round.IsStarted || ItsMyScpHandler.IsAssigning)
         {
             response = "<color=orange>Команда не может быть использована после начала раунда!</color>";
             return false;
         }
         
-        if (arguments.Count < 2)
+        if (arguments.Count == 1 && arguments.At(0) == "0")
         {
-            response = "<color=orange>Формат ввода: ims [playerId] [roleNum]</color>";
+            var player = sender.AsPlayer();
+
+            if (player == null)
+            {
+                response = "<color=orange>Для отмены брони из консоли используйте: ims [playerId] 0</color>";
+                return false;
+            }
+
+            return CancelReservation(player, out response);
+        }
+
+        if (arguments.Count != 2)
+        {
+            response = "<color=orange>Формат ввода: ims [playerId] [roleNum]\n" +
+                       "Отмена своей брони: ims 0\nОтмена брони игрока: ims [playerId] 0</color>";
             return false;
         }
         
-        if (!short.TryParse(arguments.At(0), out var id))
+        if (!ushort.TryParse(arguments.At(0), out var id) || id == 0)
         {
             response = "<color=orange>Некорректное значение у ID игрока! (Пример: 1, 2, 3...)</color>";
             return false;
@@ -55,11 +78,26 @@ public class ItsMyScpCommand : ICommand
             return false;
         }
         
-        var target = Player.Get((ushort)id);
+        var target = Player.Get(id);
 
-        if (target == null)
+        if (target == null || !target.IsConnected)
         {
             response = "<color=orange>Игрок не найден!</color>";
+            return false;
+        }
+
+        if (roleNum == 0)
+            return CancelReservation(target, out response);
+
+        if (target.IsNPC || target.IsOverwatchEnabled)
+        {
+            response = "<color=orange>Нельзя забронировать SCP для NPC или игрока в режиме надзирателя!</color>";
+            return false;
+        }
+
+        if (ScpPlayerPicker.IsOptedOutOfScp(target.ReferenceHub))
+        {
+            response = "<color=orange>Игрок отключил появление за SCP в настройках игры!</color>";
             return false;
         }
         
@@ -104,38 +142,39 @@ public class ItsMyScpCommand : ICommand
             }
         }
 
-        if (role == null)
+        if (role == null || !ItsMyScpHandler.AvailableRoles.Contains(role.Value))
         {
-            response = $"<color=orange>Роль не найдена!</color>";
+            response = "<color=orange>Роль не найдена или недоступна для бронирования!</color>";
             return false;
         }
 
-        if (ItsMyScpHandler.ReservedRoles.TryGetValue((RoleTypeId)role, out var player))
+        if (ItsMyScpHandler.ReservedRoles.TryGetValue(target, out var reservedRole) && reservedRole == role.Value)
         {
-            if (player == target)
-            {
-                response = $"<color=orange>Указанный игрок уже занял эту роль!</color>";
-                return false;
-            }
-            
-            response = $"<color=orange>Роль уже занята другим игроком!</color>";
+            response = "<color=orange>Указанный игрок уже занял эту роль!</color>";
             return false;
         }
-        
-        var keysToRemove = ItsMyScpHandler.ReservedRoles
-            .Where(p => p.Value == target)
-            .Select(p => p.Key)
-            .ToList();
-        
-        foreach (var key in keysToRemove)
+
+        if (ItsMyScpHandler.ReservedRoles.ContainsValue(role.Value))
         {
-            ItsMyScpHandler.ReservedRoles.Remove(key);
-            target.AdvancedCommand().PlayerProperties.ReservedRole = null;
+            response = "<color=orange>Роль уже занята другим игроком!</color>";
+            return false;
         }
-        
-        ItsMyScpHandler.ReservedRoles.Add((RoleTypeId)role, target);
-        target.AdvancedCommand().PlayerProperties.ReservedRole = role;
-        response = $"<color=green>Успешно!</color>";
+
+        ItsMyScpHandler.ReservedRoles[target] = role.Value;
+        response = $"<color=green>Роль SCP-{roleNum} забронирована для игрока {target.Nickname}! " +
+                   "При нехватке мест SCP проводится случайный выбор среди участников бронирования.</color>";
+        return true;
+    }
+
+    private static bool CancelReservation(Player player, out string response)
+    {
+        if (!ItsMyScpHandler.ReservedRoles.Remove(player))
+        {
+            response = "<color=orange>Указанный игрок не бронировал роль SCP!</color>";
+            return false;
+        }
+
+        response = "<color=green>Бронирование роли SCP отменено!</color>";
         return true;
     }
     

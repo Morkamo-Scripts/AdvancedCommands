@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using AdvancedCommands.Commands.CallAdmin.Subcommands;
+using AdvancedCommands.Components;
 using AdvancedCommands.Components.Extensions;
 using CommandSystem;
 using Exiled.API.Features;
@@ -12,14 +13,22 @@ namespace AdvancedCommands.Commands.CallAdmin;
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(GameConsoleCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class CallAdminCommand : ICommand
+public class CallAdminCommand : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpCallAdmin.IsActive ?? false;
+
     public string Command { get; } = "callAdmin";
     public string[] Aliases { get; } = { "call" };
     public string Description { get; } = "Вызывает администратора!";
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (sender is not PlayerCommandSender)
         {
             response = "<color=orange>Команда доступна только игрокам!</color>";

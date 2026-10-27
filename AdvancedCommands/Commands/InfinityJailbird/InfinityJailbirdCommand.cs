@@ -1,4 +1,5 @@
 ﻿using System;
+using AdvancedCommands.Components;
 using AdvancedCommands.Components.Extensions;
 using CommandSystem;
 using Exiled.API.Features;
@@ -8,14 +9,22 @@ namespace AdvancedCommands.Commands.InfinityJailbird;
 
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class InfinityJailbirdCommand : ICommand
+public class InfinityJailbirdCommand : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpInfinityJailbird.IsActive ?? false;
+
     public string Command { get; } = "infinityJailbird";
     public string[] Aliases { get; } = { "infjb" };
     public string Description { get; } = "Включает или отключает режим не ломающегося Jailbird у игрока!";
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (!sender.CheckPermission("ac.infjb"))
         {
             string requestPermission = "Требуется разрешение - 'ac.infjb'";

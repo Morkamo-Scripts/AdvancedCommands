@@ -1,4 +1,5 @@
 ﻿using System;
+using AdvancedCommands.Components;
 using CommandSystem;
 using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
@@ -7,14 +8,22 @@ namespace AdvancedCommands.Commands.AddAhp;
 
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class AddAhpCommand : ICommand
+public class AddAhpCommand : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpAddahp.IsActive ?? false;
+
     public string Command { get; } = "addahp";
     public string[] Aliases { get; } = [];
     public string Description { get; } = "Добавляет игроку AHP защиту!";
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (!sender.CheckPermission("ac.addahp"))
         {
             string requestPermission = "Требуется разрешение - 'ac.addahp'";

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using AdvancedCommands.Components.Features.Components.Interfaces;
 using Exiled.API.Enums;
-using PlayerRoles;
+using LabApi.Features.Wrappers;
 using UnityEngine;
 
 namespace AdvancedCommands.Components.Features.Components;
@@ -14,7 +14,13 @@ public class PlayerProperties(PlayerAdvancedCommands playerAdvancedCommands) : I
     public bool HasBeenSpawned { get; set; } = false;
     public bool IsOwnerModeEnabled { get; set; } = false;
     public bool IsUnlimitedAmmo { get; set; } = false;
-    public RoleTypeId? ReservedRole { get; set; } = null;
+    public bool IsCapybaraModeEnabled { get; set; } = false;
+    public GameObject CapybaraModel { get; set; } = null;
+    
+    public Player SaddledPlayer { get; set; } = null;
+    
+    public bool IsMiyabiModeEnabled { get; set; } = false;
+    public GameObject MiyabiModel { get; set; } = null;
     
     public bool IsInfinityJailbird { get; set; } = false;
     

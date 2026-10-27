@@ -154,6 +154,11 @@
             <Private>false</Private>
         </Reference>
 
+        <Reference Include="ProjectMER">
+          <HintPath>..\..\Libs\ProjectMER.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+
         <Reference Include="RueI, Version=3.1.2.0, Culture=neutral, processorArchitecture=MSIL">
             <HintPath>..\packages\RueI.3.1.2\lib\net48\RueI.dll</HintPath>
             <Private>false</Private>
@@ -252,9 +257,13 @@
         <Compile Include="Commands\CallAdmin\Subcommands\DisableCallsCommands.cs" />
         <Compile Include="Commands\CallAdmin\Subcommands\ImSleepingCommand.cs" />
         <Compile Include="Commands\CallScp956\CallScp956Command.cs" />
+        <Compile Include="Commands\CapybaraMode\CapybaraModeCommand.cs" />
+        <Compile Include="Commands\CapybaraMode\CapybaraModeHandler.cs" />
         <Compile Include="Commands\DisableScp2536\Disable2536Handler.cs" />
         <Compile Include="Commands\DisableScp2536\DisableScp2536Command.cs" />
         <Compile Include="Commands\ElevalorLock\ElevalorsLockCommand.cs" />
+        <Compile Include="Commands\ExplodeGrenade\ExplodeGrenadeCommand.cs" />
+        <Compile Include="Commands\ExplodeSimulate\ExplodeSimulateCommand.cs" />
         <Compile Include="Commands\GlobalInfinityRadio\GlobalInfinityRadioCommand.cs" />
         <Compile Include="Commands\GlobalInfinityRadio\GlobalInfinityRadioHandler.cs" />
         <Compile Include="Commands\InfinityJailbird\InfinityJailbirdCommand.cs" />
@@ -262,14 +271,16 @@
         <Compile Include="Commands\InfinityMagazines\InfinityMagazinesHandler.cs" />
         <Compile Include="Commands\ItsMyScp\ItsMyScpHandler.cs" />
         <Compile Include="Commands\ItsMyScp\ItsMyScpCommand.cs" />
+        <Compile Include="Commands\Jail\JailCommand.cs" />
         <Compile Include="Commands\JoinWave\SquadTypes.cs" />
         <Compile Include="Commands\LockVisibleDoor\LockVisibleDoorCommand.cs" />
+        <Compile Include="Commands\MiyabiMode\MiyabiModeHandler.cs" />
+        <Compile Include="Commands\MiyabiMode\MiyabiModeCommand.cs" />
         <Compile Include="Commands\NonBreakableGlass\NonBreakableGlassCommand.cs" />
         <Compile Include="Commands\NonBreakableGlass\NonBreakableGlassHandler.cs" />
         <Compile Include="Commands\OwnerMode\OwnerModeCommand.cs" />
         <Compile Include="Commands\OwnerMode\OwnerModeHandler.cs" />
         <Compile Include="Commands\ReservedSlotsManagement\ReservedSlotsManagement.cs" />
-        <Compile Include="Commands\CapybaraMode\CapybaraModeCommand.cs" />
         <Compile Include="Commands\IWantScp\IwsCommand.cs" />
         <Compile Include="Commands\IWantScp\IwsHandler.cs" />
         <Compile Include="Commands\JoinWave\JoinWaveCommand.cs" />
@@ -278,6 +289,7 @@
         <Compile Include="Commands\RandomPlayerSelection\RandomPlayerSelectionCommand.cs" />
         <Compile Include="Commands\ReservedSlotsManagement\RsmHandler.cs" />
         <Compile Include="Commands\ReservedSlotsManagement\RsmHeader.cs" />
+        <Compile Include="Commands\SaddlePlayer\SaddlePlayerCommand.cs" />
         <Compile Include="Commands\SerpentHandsWave\SerpentHandsWaveCommand.cs" />
         <Compile Include="Commands\SerpentHandsWave\SerpentHandsWaveHandler.cs" />
         <Compile Include="Components\Extensions\PlayerExtensions.cs" />
@@ -286,6 +298,8 @@
         <Compile Include="Components\Features\Components\Interfaces\IPropertyModule.cs" />
         <Compile Include="Components\Features\CoroutineRunner.cs" />
         <Compile Include="Components\Features\PlayerAdvancedCommands.cs" />
+        <Compile Include="CommandProperties.cs" />
+        <Compile Include="Components\IAdvancedCommand.cs" />
         <Compile Include="Config.cs" />
         <Compile Include="Events\Components\ICancelableEvent.cs" />
         <Compile Include="Events\EventArgs\Player\PlayerCalledAdminEventArgs.cs" />
@@ -293,6 +307,9 @@
         <Compile Include="Events\EventManager.cs" />
         <Compile Include="Events\PlayerEvents.cs" />
         <Compile Include="Patches\JailbirdWearStatePatch.cs" />
+        <Compile Include="Patches\ItsMyScpSpawnPatch.cs" />
+        <Compile Include="Patches\ItsMyScpPlayerPickerPatch.cs" />
+        <Compile Include="Patches\ItsMyScpAssignPatch.cs" />
         <Compile Include="Plugin.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
     </ItemGroup>

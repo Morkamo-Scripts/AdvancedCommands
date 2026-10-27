@@ -1,4 +1,5 @@
 ﻿using System;
+using AdvancedCommands.Components;
 using CommandSystem;
 using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
@@ -7,14 +8,22 @@ namespace AdvancedCommands.Commands.AddHS;
 
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class AddHsCommand : ICommand
+public class AddHsCommand : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpAddhs.IsActive ?? false;
+
     public string Command { get; } = "addhs";
     public string[] Aliases { get; } = [];
     public string Description { get; } = "Добавляет игроку HS защиту!";
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (!sender.CheckPermission("ac.addhs"))
         {
             string requestPermission = "Требуется разрешение - 'ac.addhs'";

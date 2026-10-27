@@ -11,8 +11,10 @@ namespace AdvancedCommands
     {
         public bool IsEnabled { get; set; } = true;
         public bool Debug { get; set; } = false;
-
+        
         public string ServerIdentifier { get; set; } = "Classic";
+        
+        public CommandProperties CommandProperties { get; set; } = new();
         
         [Description("Спавнит игрока в недавно прибывшем отряде в течение овертайма.")]
         public JoinWaveHandler JoinWave { get; set; } = new();

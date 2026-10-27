@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using AdvancedCommands.Components;
 using AdvancedCommands.Components.Extensions;
 using CommandSystem;
 using Exiled.API.Features;
@@ -11,8 +12,10 @@ namespace AdvancedCommands.Commands.CallAdmin.Subcommands;
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(GameConsoleCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class DisableCallsCommand : ICommand
+public class DisableCallsCommand : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpDisableCalls.IsActive ?? false;
+
     public string Command { get; } = "DisableCalls";
     public string[] Aliases { get; } = { "disCalls", "callsOf" };
     public string Description { get; } = "Отключает и включает возможность вызова администрации! (.calls)";
@@ -21,6 +24,12 @@ public class DisableCallsCommand : ICommand
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (sender is not PlayerCommandSender)
         {
             response = "<color=orange>Команда доступна только игрокам!</color>";

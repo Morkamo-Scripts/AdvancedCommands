@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using AdvancedCommands.Components;
 using CommandSystem;
 using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
@@ -12,14 +13,22 @@ namespace AdvancedCommands.Commands.ElevalorLock;
 
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class ElevalorsLockCommand : ICommand
+public class ElevalorsLockCommand : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpElevatorsLock.IsActive ?? false;
+
     public string Command { get; } = "elevatorsLock";
     public string[] Aliases { get; } = { "elslock" };
     public string Description { get; } = "Включает и выключает блокировку всех лифтов!";
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (!sender.CheckPermission("ac.elslock"))
         {
             string requestPermission = "Требуется разрешение - 'ac.elslock'";

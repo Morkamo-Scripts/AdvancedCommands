@@ -1,4 +1,5 @@
 ﻿using System;
+using AdvancedCommands.Components;
 using AdvancedCommands.Components.Extensions;
 using CommandSystem;
 using Exiled.API.Features;
@@ -10,14 +11,22 @@ namespace AdvancedCommands.Commands.InfinityMagazines;
 
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class InfinityMagazinesCommand : ICommand
+public class InfinityMagazinesCommand : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpInfinityMagazines.IsActive ?? false;
+
     public string Command { get; } = "infinityMagazines";
     public string[] Aliases { get; } = { "infmags" };
     public string Description { get; } = "Включает или отключает бесконечные магазины у игрока!";
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (!sender.CheckPermission("ac.infmags"))
         {
             string requestPermission = "Требуется разрешение - 'ac.infmags'";

@@ -1,4 +1,5 @@
 ﻿using System;
+using AdvancedCommands.Components;
 using AdvancedCommands.Components.Extensions;
 using CommandSystem;
 using Exiled.API.Features;
@@ -9,14 +10,22 @@ namespace AdvancedCommands.Commands.CallScp956;
 
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class CallScp956Command : ICommand
+public class CallScp956Command : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpCall956.IsActive ?? false;
+
     public string Command { get; } = "call956";
     public string[] Aliases { get; } = [];
     public string Description { get; } = "Призывает SCP-956 за спину игрока!";
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (!sender.CheckPermission("ac.call956"))
         {
             string requestPermission = "Требуется разрешение - 'ac.call956'";

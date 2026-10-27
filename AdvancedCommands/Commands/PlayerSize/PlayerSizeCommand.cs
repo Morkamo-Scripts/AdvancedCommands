@@ -1,4 +1,5 @@
 ﻿using System;
+using AdvancedCommands.Components;
 using AdvancedCommands.Components.Extensions;
 using CommandSystem;
 using Exiled.API.Features;
@@ -9,14 +10,22 @@ namespace AdvancedCommands.Commands.PlayerSize;
 
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class PlayerSizeCommand : ICommand
+public class PlayerSizeCommand : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpPlayerSize.IsActive ?? false;
+
     public string Command { get; } = "playerSize";
     public string[] Aliases { get; } = { "pls", "plsize" };
     public string Description { get; } = "Меняет размер игрока.";
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (!sender.CheckPermission("ac.playerSize"))
         {
             string requestPermission = "Требуется разрешение - 'ac.playerSize'";

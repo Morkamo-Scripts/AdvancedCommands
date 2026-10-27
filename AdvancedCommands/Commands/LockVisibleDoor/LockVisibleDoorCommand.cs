@@ -1,4 +1,5 @@
 ﻿using System;
+using AdvancedCommands.Components;
 using AdvancedCommands.Components.Extensions;
 using CommandSystem;
 using Exiled.API.Features;
@@ -12,14 +13,22 @@ namespace AdvancedCommands.Commands.LockVisibleDoor;
 
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class LockVisibleDoorCommand : ICommand
+public class LockVisibleDoorCommand : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpLockVisibleDoor.IsActive ?? false;
+
     public string Command { get; } = "LockVisibleDoor";
     public string[] Aliases { get; } = { "lockvd", "lvd" };
     public string Description { get; } = "Включает/выключает блокировку двери, на которую вы смотрите.";
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (sender is not PlayerCommandSender)
         {
             response = "<color=orange>Только для игроков!</color>";

@@ -50,7 +50,7 @@ public class InfinityMagazinesHandler
 
     public void OnChangedRole(PlayerChangedRoleEventArgs ev)
     {
-        if (Player.Get(ev.Player).IsNPC)
+        if (ev.Player.IsNpc)
             return;
         
         try

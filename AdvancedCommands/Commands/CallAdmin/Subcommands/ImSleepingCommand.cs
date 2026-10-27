@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using AdvancedCommands.Components;
 using AdvancedCommands.Components.Extensions;
 using CommandSystem;
 using Exiled.API.Features;
@@ -11,8 +12,10 @@ namespace AdvancedCommands.Commands.CallAdmin.Subcommands;
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(GameConsoleCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class ImSleepingCommand : ICommand
+public class ImSleepingCommand : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpIsleep.IsActive ?? false;
+
     public string Command { get; } = "isleep";
     public string[] Aliases { get; } = [];
     public string Description { get; } = "Переводит вас в спящий режим! " +
@@ -20,6 +23,12 @@ public class ImSleepingCommand : ICommand
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (sender is not PlayerCommandSender)
         {
             response = "<color=orange>Команда доступна только игрокам!</color>";

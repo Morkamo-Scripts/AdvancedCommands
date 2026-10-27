@@ -1,4 +1,5 @@
 ﻿using System;
+using AdvancedCommands.Components;
 using CommandSystem;
 using Exiled.Events.EventArgs.Player;
 using Exiled.Loader;
@@ -10,14 +11,23 @@ namespace AdvancedCommands.Commands.ReservedSlotsManagement;
 
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class ReservedSlotsManagement : ICommand
+[CommandHandler(typeof(GameConsoleCommandHandler))]
+public class ReservedSlotsManagement : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpReservedSlot.IsActive ?? false;
+
     public string Command { get; } = "reservedSlot";
-    public string[] Aliases { get; } = { "resslot", "rslot", "rsslot" };
-    public string Description { get; } = "Добавляет и удаляет игроков из списка резервных слотов.";
+    public string[] Aliases { get; } = { "resslot", "rslot", "rsslot", "addrs" };
+    public string Description { get; } = "Добавляет и удаляет резервный слот за игроком.";
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (!sender.CheckPermission("ac.reservedSlotsControl"))
         {
             string requestPermission = "Требуется разрешение - 'ac.reservedSlotsControl'";

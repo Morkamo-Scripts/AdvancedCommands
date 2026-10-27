@@ -34,7 +34,7 @@ public class RsmHandler
         
         if (Plugin.Instance.RsmHeader.ReservedGroups.Contains(group))
         {
-            ev.Result = ReservedSlotEventResult.CanUseReservedSlots;
+            ev.Result = ReservedSlotEventResult.AllowConnectionUnconditionally;
             ev.IsAllowed = true;
         }
     }

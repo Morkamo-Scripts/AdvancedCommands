@@ -1,4 +1,5 @@
 ﻿using System;
+using AdvancedCommands.Components;
 using CommandSystem;
 using Exiled.Permissions.Extensions;
 
@@ -6,14 +7,22 @@ namespace AdvancedCommands.Commands.GlobalInfinityRadio;
 
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class GlobalInfinityRadio : ICommand
+public class GlobalInfinityRadio : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpGlobalInfinityRadio.IsActive ?? false;
+
     public string Command { get; } = "globalInfinityRadio";
     public string[] Aliases { get; } = { "gir" };
     public string Description { get; } = "Включает или отключает режим не разряжающегося радио (рации)!";
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (!sender.CheckPermission("ac.gir"))
         {
             string requestPermission = "Требуется разрешение - 'ac.gir'";

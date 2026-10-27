@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AdvancedCommands.Components;
 using AdvancedCommands.Components.Extensions;
 using CommandSystem;
 using Exiled.API.Enums;
@@ -17,8 +18,10 @@ namespace AdvancedCommands.Commands.JoinWave;
 
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class JoinWaveCommand : ICommand
+public class JoinWaveCommand : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpJoinWave.IsActive ?? false;
+
     public string Command { get; } = "JoinWave";
     public string[] Aliases { get; } = { "jwave", "jw" };
     public string Description { get; } = $"Спавнит игрока в недавно прибывшем отряде в течение овертайма." +
@@ -26,6 +29,12 @@ public class JoinWaveCommand : ICommand
 
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (!sender.CheckPermission("ac.joinwave"))
         {
             string requestPermission = "Требуется разрешение - 'ac.joinwave'";
@@ -63,7 +72,7 @@ public class JoinWaveCommand : ICommand
             return false;
         }
         
-        if (DateTime.UtcNow - Plugin.Instance.LastSpawnTime >= TimeSpan.FromSeconds(30))
+        if (DateTime.UtcNow - Plugin.Instance.LastSpawnTime >= TimeSpan.FromSeconds(45))
         {
             response = $"<color=orange>Время овертайма истекло! ({InstanceConfig().JoinWave.SpawnOvertime} сек.)</color>";
             return false;

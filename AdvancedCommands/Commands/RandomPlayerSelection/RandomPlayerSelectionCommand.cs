@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using AdvancedCommands.Components;
 using CommandSystem;
 using Exiled.API.Features;
 using Exiled.Permissions.Extensions;
@@ -11,8 +12,10 @@ namespace AdvancedCommands.Commands.RandomPlayerSelection;
 
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class RandomPlayerSelectionCommand : ICommand
+public class RandomPlayerSelectionCommand : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpRandomPlayerSelection.IsActive ?? false;
+
     public string Command { get; } = "RandomPlayerSelection";
     public string[] Aliases { get; } = ["rps", "rpsel"];
     public string Description { get; } =
@@ -36,6 +39,12 @@ public class RandomPlayerSelectionCommand : ICommand
 
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (!sender.CheckPermission("ac.randomPlayerSelection"))
         {
             string requestPermission = "Требуется разрешение - 'ac.randomPlayerSelection'";

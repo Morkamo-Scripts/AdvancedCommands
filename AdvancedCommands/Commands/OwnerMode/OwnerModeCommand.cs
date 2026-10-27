@@ -10,14 +10,22 @@ namespace AdvancedCommands.Commands.OwnerMode;
 
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class OwnerModeCommand : ICommand
+public class OwnerModeCommand : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpOwnerMode.IsActive ?? false;
+
     public string Command { get; } = "OwnerMode";
     public string[] Aliases { get; } = { "ownmode" };
     public string Description { get; } = "Включает и выключает игроку 'OwnerMode'.";
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (sender is not PlayerCommandSender)
         {
             response = "<color=red>Команда доступна только игрокам!</color>";

@@ -1,4 +1,5 @@
 ﻿using System;
+using AdvancedCommands.Components;
 using AdvancedCommands.Components.Extensions;
 using CommandSystem;
 using Exiled.API.Features;
@@ -9,14 +10,22 @@ namespace AdvancedCommands.Commands.DisableScp2536;
 
 [CommandHandler(typeof(ClientCommandHandler))]
 [CommandHandler(typeof(RemoteAdminCommandHandler))]
-public class DisableScp2536Command : ICommand
+public class DisableScp2536Command : ICommand, IAdvancedCommand
 {
+    public bool IsActive => Plugin.Instance?.Config.CommandProperties.CpDisable2536.IsActive ?? false;
+
     public string Command { get; } = "disable2536";
     public string[] Aliases { get; } = [];
     public string Description { get; } = "Включает и выключает возможность появления SCP-2536 в комплексе.";
     
     public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
     {
+        if (!IsActive)
+        {
+            response = "Команда отключена сервером";
+            return false;
+        }
+
         if (!sender.CheckPermission("ac.disable2536"))
         {
             string requestPermission = "Требуется разрешение - 'ac.disable2536'";
